@@ -1,2 +1,4 @@
+PyYAML>=3.11
+jsonschema>=2.4
 cliff>=1.8
 taskw>=0.8

@@ -1,0 +1,11 @@
+logging:
+  level: DEBUG
+  file: ''
+
+plugins:
+  - nickname: Emailotron
+    entrypoint: emailotron:Emailer
+    weight: 0
+    enabled: false
+    options:
+      some: thing
