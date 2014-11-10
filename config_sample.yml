@@ -3,9 +3,10 @@ logging:
   file: ''
 
 plugins:
-  - nickname: Emailotron
-    entrypoint: emailotron:Emailer
+  - name: dummy
+    entrypoint: taskforge.plugin:DummyPlugin
+    module: taskforge
     weight: 0
-    enabled: false
+    enabled: true
     options:
       some: thing
