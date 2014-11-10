@@ -2,11 +2,11 @@
 # -*- coding: utf8 -*-
 
 import logging
-import pkg_resources
 
 from cliff.command import Command
 
 from taskforge.config import Configurable
+from taskforge.plugin import load_plugin
 
 
 class Run(Command, Configurable):
@@ -38,12 +38,13 @@ class Run(Command, Configurable):
             return 1
 
         plugin_conf = plugin_conf[0]
-        self.log.info("%s" % plugin_conf)
 
         self.log.debug("loading \"{name} = {entrypoint}\"".format(
             **plugin_conf))
 
-        ep = pkg_resources.EntryPoint.parse(
-            "{name} = {entrypoint}".format(**plugin_conf), 'taskforge')
+        solo = load_plugin(plugin_conf)
 
-        plugin = ep.load()
+        solo.pre_run()
+        for t in []:
+            solo.process_task(None)
+        solo.post_run()

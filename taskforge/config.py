@@ -22,6 +22,8 @@ properties:
                 type: boolean
             name:
                 type: string
+            module:
+                type: string
             entrypoint:
                 type: string
             options:
