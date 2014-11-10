@@ -3,6 +3,7 @@ import sys
 
 from cliff.app import App
 from cliff.commandmanager import CommandManager
+from cliff.complete import CompleteCommand
 
 
 class Forge(App):
@@ -15,6 +16,7 @@ class Forge(App):
             version='0.1',
             command_manager=CommandManager('taskforge.commands'),
         )
+        self.command_manager.add_command('complete', CompleteCommand)
 
     def initialize_app(self, argv):
         self.log.debug('initialize_app')
@@ -29,6 +31,5 @@ class Forge(App):
 
 
 def cli():
-    print "hello"
     app = Forge()
     app.run(sys.argv[1:])
