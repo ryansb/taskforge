@@ -13,6 +13,16 @@ class PluginBase(object):
         pass
 
     @abc.abstractmethod
+    def pre_run(self):
+        """Optional pre-run setup. Only run once."""
+        pass
+
+    @abc.abstractmethod
+    def post_run(self):
+        """Optional post-run teardown"""
+        pass
+
+    @abc.abstractmethod
     def process_task(self, task):
         """Receive a single task in taskw format and return the task after
         processing.
