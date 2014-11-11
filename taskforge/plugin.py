@@ -3,7 +3,12 @@ import logging
 import pkg_resources
 import six
 
+import lockfile
+
 from persist import Warrior
+
+
+LOCK_PATH = '/tmp/taskforge'
 
 
 @six.add_metaclass(abc.ABCMeta)
@@ -67,11 +72,14 @@ def load_plugin(plugin_conf):
 
     return ep.load()(**plugin_conf.get('options', {}))
 
+@lockfile.locked(LOCK_PATH)
 def run_plugin(loaded):
     """Takes a plugin and runs it over pending/waiting tasks
     """
-
+    warrior = Warrior()
     loaded.pre_run()
-    for t in Warrior().iter_tasks():
-        loaded.process_task(t)
+    for t in warrior.iter_tasks():
+        m = loaded.process_task(t)
+        if m is not None:
+            warrior.task_update(m)
     loaded.post_run()

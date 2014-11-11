@@ -12,8 +12,9 @@ class Warrior(object):
             taskrc = os.path.join(
                 os.path.expandvars('$HOME'),
                 '.taskrc')
-        self._task = taskw.TaskWarrior(config_filename=taskrc,
-                                       marshal=True)
+        if self._task is None:
+            self._task = taskw.TaskWarrior(config_filename=taskrc,
+                                           marshal=True)
 
     def iter_tasks(self):
         return self._task.filter_tasks({
@@ -22,3 +23,6 @@ class Warrior(object):
                 ('status', 'waiting'),
             ]
         })
+
+    def update_task(self, task):
+        self._task.update_task(task)
