@@ -26,7 +26,7 @@ class PluginBase(object):
 
     @abc.abstractmethod
     def process_task(self, task):
-        """Receive a single task in taskw format and return the task after
+        """Receive a single taskw.task:Task object and returns the task after
         processing.
 
         If there are no changes, None should be returned
@@ -51,6 +51,7 @@ class DummyPlugin(PluginBase):
         self.log.info("Task pro:{} tags:{} found".format(task['project'], task['tags']))
         for a in task['annotations']:
             self.log.info(a[:80])
+        return None
 
 
 def load_plugin(plugin_conf):
