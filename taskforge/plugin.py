@@ -3,6 +3,8 @@ import logging
 import pkg_resources
 import six
 
+from persist import Warrior
+
 
 @six.add_metaclass(abc.ABCMeta)
 class PluginBase(object):
@@ -44,8 +46,11 @@ class DummyPlugin(PluginBase):
         self.log.debug("postrun for DummyPlugin")
 
     def process_task(self, task):
-        self.log.info("Hey, dummy plugin loaded with options: "
+        self.log.debug("Dummy plugin loaded with options: "
                       "{}".format(self.opts))
+        self.log.info("Task pro:{} tags:{} found".format(task['project'], task['tags']))
+        for a in task['annotations']:
+            self.log.info(a[:80])
 
 
 def load_plugin(plugin_conf):
