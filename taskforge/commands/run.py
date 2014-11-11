@@ -6,7 +6,7 @@ import logging
 from cliff.command import Command
 
 from taskforge.config import Configurable
-from taskforge.plugin import load_plugin
+from taskforge.plugin import load_plugin, run_plugin
 
 
 class Run(Command, Configurable):
@@ -44,7 +44,4 @@ class Run(Command, Configurable):
 
         solo = load_plugin(plugin_conf)
 
-        solo.pre_run()
-        for t in []:
-            solo.process_task(None)
-        solo.post_run()
+        run_plugin(solo)

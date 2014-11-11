@@ -60,3 +60,12 @@ def load_plugin(plugin_conf):
     )
 
     return ep.load()(**plugin_conf.get('options', {}))
+
+def run_plugin(loaded):
+    """Takes a plugin and runs it over pending/waiting tasks
+    """
+
+    loaded.pre_run()
+    for t in Warrior().iter_tasks():
+        loaded.process_task(t)
+    loaded.post_run()
