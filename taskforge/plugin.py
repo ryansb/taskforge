@@ -82,7 +82,10 @@ def run_plugin(loaded):
     warrior = Warrior()
     loaded.pre_run()
     for t in warrior.iter_tasks():
+        orig_desc = str(t['description'])
         m = loaded.process_task(t)
         if m is not None:
             warrior.task_update(m)
+            loaded.log.info("Updated task {id} with new description/annotations".format(**t))
+            loaded.log.debug("Task {id} desc={description}".format(**t))
     loaded.post_run()

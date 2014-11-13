@@ -1,12 +1,17 @@
 #!/bin/env python
 # -*- coding: utf8 -*-
 
-from functools import lru_cache
 import re
 
 import requests
 
 from taskforge.plugin import PluginBase
+
+"""Adapted from https;//gist.github.com/uogbuji/705383"""
+_URL_REGEX = re.compile(
+    ur'(?i)\b((?:https?://)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+'
+    + ur'(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?'
+    + ur'\xab\xbb\u201c\u201d\u2018\u2019]))')
 
 
 class Shortener(PluginBase):
@@ -21,18 +26,47 @@ class Shortener(PluginBase):
     def post_run(self):
         pass
 
-    @lru_cache(255)
+    def _shorten_contents(self, text):
+        """Returns a list of URLs in order of appearance
+
+        Will not return if:
+          - URL is already shortened
+          - URL is shorter than it would be shortened
+        """
+        urls = [
+            m[0] for m in _URL_REGEX.findall(text)
+            if len(m[0]) >= 24 and not m[0].startswith('http://da.gd/')
+        ]
+
+        for url in urls:
+            if re.match('.*{}\.\.\..*'.format(url), text):
+                continue
+            shortened = self._shorten_url(url)
+            self.log.debug("Shortened {} to {}".format(url, shortened))
+            text = text.replace(url, shortened)
+
+        return text
+
     def _shorten_url(self, url):
-        return requests.get(self._base,
-                            params={'url': url}
-                            ).text.strip()
+        r = requests.get(self._base,
+                         params={'url': url})
+        if r.status_code != 200:
+            return None
+        return r.text.strip()
 
-    def _shorten_urls(self, text):
+    def _shorten_urls(self, desc, annotations):
         """Given arbitrary text, shorten any url-like segments"""
-        pass
-
-    def _is_shortened(self, url):
-        return bool(re.match('^http://da.gd/.*$', url))
+        for index in range(len(annotations)):
+            annotations[index] = self._shorten_contents(annotations[index])
+        desc = self._shorten_contents(desc)
+        return desc, annotations
 
     def process_task(self, task):
-        pass
+        newDesc, anno = self._shorten_urls(str(task['description']), list(task['annotations']))
+        results = task.update({
+                'description': newDesc,
+                'annotations': anno,
+            })
+        if any(results.values()):
+            return task
+        return None
