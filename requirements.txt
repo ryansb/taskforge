@@ -4,3 +4,4 @@ jsonschema>=2.4
 cliff>=1.8
 taskw>=0.8
 six>=1.8
+requests>=2.4

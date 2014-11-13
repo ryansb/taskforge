@@ -10,3 +10,8 @@ plugins:
     enabled: true
     options:
       some: thing
+  - name: shortener
+    entrypoint: taskforge.plugins.shorten:Shortener
+    module: taskforge
+    weight: 0
+    enabled: false
