@@ -1,4 +1,4 @@
-# taskgears
+# taskforge
 
 Powered by [taskw](https://github.com/ralphbean/taskw)
 
@@ -30,3 +30,8 @@ plugins:
 
 Yes, that's right, you can build your own plugins! Just add your plugin to the
 list in the plugins section and set `enabled: true`.
+
+# License
+
+Taskforge is made available under the GNU Affero General Public License, see
+LICENSE.txt for details.
