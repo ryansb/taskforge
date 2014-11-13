@@ -5,8 +5,10 @@ import os
 
 import taskw
 
+
 class Warrior(object):
     _task = None
+
     def __init__(self, taskrc=''):
         if not taskrc:
             taskrc = os.path.join(
@@ -24,5 +26,5 @@ class Warrior(object):
             ]
         })
 
-    def update_task(self, task):
-        self._task.update_task(task)
+    def task_update(self, task):
+        self._task.task_update(task)
