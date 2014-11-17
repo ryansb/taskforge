@@ -7,7 +7,7 @@ plugins:
     entrypoint: taskforge.plugin:DummyPlugin
     module: taskforge
     weight: 0
-    enabled: true
+    enabled: false
     options:
       some: thing
   - name: shortener
@@ -15,3 +15,5 @@ plugins:
     module: taskforge
     weight: 0
     enabled: false
+    options:
+      max_length: 24
