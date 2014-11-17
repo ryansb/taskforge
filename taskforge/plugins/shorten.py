@@ -27,14 +27,18 @@ from taskforge.plugin import PluginBase
 """Adapted from https;//gist.github.com/uogbuji/705383"""
 _URL_REGEX = re.compile(
     ur'(?i)\b((?:https?://)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+'
-    + ur'(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?'
-    + ur'\xab\xbb\u201c\u201d\u2018\u2019]))')
+    ur'(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?'
+    ur'\xab\xbb\u201c\u201d\u2018\u2019]))')
 
 
 class Shortener(PluginBase):
-    _base = 'http://da.gd/s'
+    _base = 'http://da.gd/'
+    max_length = 24 # default longest non-shortened URL
 
     def __init__(self, **kwargs):
+        self.max_length = kwargs.get('max_length',
+                                     self.max_length)
+
         super(Shortener, self).__init__(**kwargs)
 
     def pre_run(self):
@@ -52,7 +56,7 @@ class Shortener(PluginBase):
         """
         urls = [
             m[0] for m in _URL_REGEX.findall(text)
-            if len(m[0]) >= 24 and not m[0].startswith('http://da.gd/')
+            if len(m[0]) > self.max_length and not m[0].startswith(self._base)
         ]
 
         for url in urls:
@@ -65,7 +69,7 @@ class Shortener(PluginBase):
         return text
 
     def _shorten_url(self, url):
-        r = requests.get(self._base,
+        r = requests.get(self._base + 's',
                          params={'url': url})
         if r.status_code != 200:
             return None
