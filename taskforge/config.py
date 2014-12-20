@@ -64,9 +64,6 @@ class Configurable(object):
             conf_path = os.path.join(
                 os.path.expandvars('$HOME'),
                 '.taskforgerc')
-            conf_path = os.path.join(
-                '/home/ryansb/code/taskforge/',
-                'config_sample.yml')
         with open(conf_path, 'r') as fh:
             config = yaml.load(fh)
 
