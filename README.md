@@ -18,7 +18,7 @@ plugins:
     # `taskforge.plugins.Base`
     entrypoint: emailotron:Emailer
     # plugins are run in ascending weight order. Plugins with the same
-    # weight may be run in any order
+    # weight may be run in any order. The default value for weight is 100.
     weight: 0
     enabled: false
     # plugins are initialized with the contents of this options field

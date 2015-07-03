@@ -42,7 +42,9 @@ class RunAll(Command, Configurable):
 
     def take_action(self, parsed_args):
         self.log.debug("%s" % self.config)
-        for conf in self.config['plugins']:
+        for conf in sorted(self.config['plugins'],
+                           # sort plugins by user-assigned weight
+                           key=lambda x: x.get('weight', 100)):
             if not conf.get('enabled', False):
                 self.log.debug("Skipping disabled plugin %s" % conf['name'])
                 continue
