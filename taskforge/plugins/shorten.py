@@ -24,7 +24,7 @@ import requests
 
 from taskforge.plugin import PluginBase
 
-"""Adapted from https;//gist.github.com/uogbuji/705383"""
+"""Adapted from https://gist.github.com/uogbuji/705383"""
 _URL_REGEX = re.compile(
     ur'(?i)\b((?:https?://)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+'
     ur'(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?'
@@ -83,7 +83,7 @@ class Shortener(PluginBase):
         return desc, annotations
 
     def process_task(self, task):
-        newDesc, anno = self._shorten_urls(str(task['description']), list(task['annotations']))
+        newDesc, anno = self._shorten_urls(str(task['description']), task.get('annotations', []))
         results = task.update({
                 'description': newDesc,
                 'annotations': anno,
