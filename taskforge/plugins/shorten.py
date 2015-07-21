@@ -84,9 +84,14 @@ class Shortener(PluginBase):
 
     def process_task(self, task):
         newDesc, anno = self._shorten_urls(str(task['description']), task.get('annotations', []))
-        results = task.update({
-                'description': newDesc,
-                'annotations': anno,
+        if anno:
+            results = task.update({
+                    'description': newDesc,
+                    'annotations': anno,
+                })
+        else:
+            results = task.update({
+                    'description': newDesc,
             })
         if any(results.values()):
             return task
